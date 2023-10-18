@@ -9,14 +9,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/customer")
-public class CustomerController {
+public class CustomerRestBasicController {
 
     @Autowired
-    private CustomerRepository customerRepository;
+    private CustomerRepository customerRepository;//다 entity출력
 
     @PostMapping
     public Customer create(@RequestBody Customer customer){
@@ -30,7 +29,8 @@ public class CustomerController {
 
     @RequestMapping(value = "/{id}")
     public Customer getCustomer(@PathVariable Long id){
-        return customerRepository.findById(id).orElseThrow(()->new BusinessException("Customer Not Found",HttpStatus.NOT_FOUND));
+        return customerRepository.findById(id).orElseThrow(
+                ()->new BusinessException("Customer Not Found",HttpStatus.NOT_FOUND));
     }
 
     @RequestMapping(value = "/age/{age}", produces = {"application/json"})
@@ -40,12 +40,14 @@ public class CustomerController {
 
     @RequestMapping(value = "/email/{email}", produces = {"application/json"})
     public Customer getCustomersByEmail(@PathVariable String email){
-        return customerRepository.findByEmail(email).orElseThrow(()->new BusinessException("Customer Not Found",HttpStatus.NOT_FOUND));
+        return customerRepository.findByEmail(email).orElseThrow(
+                ()->new BusinessException("Customer Not Found",HttpStatus.NOT_FOUND));
     }
 
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<?> deleteCustomer(@PathVariable Long id){
-        Customer customer = customerRepository.findById(id).orElseThrow(()->new BusinessException("Customer Not Found",HttpStatus.NOT_FOUND));
+        Customer customer = customerRepository.findById(id).orElseThrow(
+                ()->new BusinessException("Customer Not Found",HttpStatus.NOT_FOUND));
         customerRepository.delete(customer);
         return ResponseEntity.ok("delete customer success");
     }
